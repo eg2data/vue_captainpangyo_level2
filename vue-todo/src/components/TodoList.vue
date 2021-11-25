@@ -1,11 +1,12 @@
 <template>
     <transition-group name="list" tag="ul">
-    <li v-for="(todoItem, index) in this.$store.state.todoItems" v-bind:key="todoItem.item" class="shadow">
-      <i class="fas fa-check checkBtn" v-on:click="toggleComplete(todoItem, index)" v-bind:class="{checkBtnCompleted: todoItem.completed}"></i>
+    <li v-for="(todoItem, index) in this.storedTodoItems" v-bind:key="todoItem.item" class="shadow">
+      <i class="fas fa-check checkBtn" v-on:click="toggleComplete({todoItem, index})"
+            v-bind:class="{checkBtnCompleted: todoItem.completed}"></i>
       <span v-bind:class="{textCompleted: todoItem.completed}">
         {{ todoItem.item }}
       </span>
-      <span v-on:click="removeTodo(todoItem, index)" class="removeBtn">
+      <span v-on:click="removeTodo({todoItem, index})" class="removeBtn">
         <i class="fas fa-trash-alt"></i>
       </span>
     </li>
@@ -13,17 +14,18 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
+
 export default {
   methods: {
-    removeTodo(todoItem, index) {
-      // this.$emit('removeTodoItem', todoItem, index); // 받은 거 그대로 올렸다.
-      this.$store.commit('removeOneItem', {todoItem, index});
-    },
-    toggleComplete(todoItem, index) {
-      // this.$emit('toggleTodoItem', todoItem, index);
-      this.$store.commit('toggleOneItem', {todoItem, index});
-    },
+    ...mapMutations({
+      removeTodo: 'removeOneItem', // 인자 선언 안해도, 암묵적으로 넘긴다.
+      toggleComplete: 'toggleOneItem'
+    }),
   },
+  computed: {
+    ...mapGetters(['storedTodoItems'])
+    }
 }
 </script>
 

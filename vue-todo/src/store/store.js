@@ -22,6 +22,11 @@ export const store = new Vuex.Store({
         headerText: "TODO it!",
         todoItems: storage.fetch()
     },
+    getters: {
+        storedTodoItems(state) {
+            return state.todoItems;
+        }
+    },
     mutations: {
         addOneItem(state, todoItem) { // event emit 시 적은 인자까지 여기서 받는
             const obj = {completed: false, item: todoItem};
